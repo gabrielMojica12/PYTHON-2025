@@ -1,1 +1,172 @@
-JOHAN GABRIEL MOJICA BUENO 02240131020
+#JOHAN GABRIEL MOJICA BUENO 02240131020
+
+def mostrar_menu(): #MENÚ
+    print("\n--- MENÚ DE GESTIÓN DE USUARIOS ---")
+    print("1. Agregar usuario (append)")
+    print("2. Agregar varios usuarios (extend)")
+    print("3. Insertar usuario en posición (insert)")
+    print("4. Eliminar por índice (pop)")
+    print("5. Eliminar por nombre (remove)")
+    print("6. Buscar índice de un usuario (index)")
+    print("7. Contar apariciones de un usuario (count)")
+    print("8. Ordenar lista A→Z (sort)")
+    print("9. Invertir orden (reverse)")
+    print("10. Mostrar lista")
+    print("11. Vaciar lista (clear)")
+    print("12. Finalizar")
+    return input("Elija una opción (1-12): ").strip() #Seleccionador
+
+
+def agregar_usuario(usuarios): 
+    nombre = input("Nombre a agregar: ").strip()
+    if nombre:
+        usuarios.append(nombre)
+        print(f"'{nombre}' agregado.")
+    else:
+        print("Nombre vacío. No se agregó.") #Comprobación si se introdujo o no un nombre
+    return usuarios
+
+
+def agregar_varios(usuarios):
+    entrada = input("Ingrese nombres separados por coma (ej: Ana,Beto,Ceci): ").strip()
+    if entrada:
+        nuevos = [s.strip() for s in entrada.split(",") if s.strip()] #Añadir de a varios con ","
+        if nuevos:
+            usuarios.extend(nuevos)
+            print(f"Agregados: {nuevos}")
+    else:
+        print("No ingresaste nombres.") #Comprobación si se introdujo o no un nombre
+    return usuarios
+
+
+def insertar_usuario(usuarios):
+    print(f"Posiciones válidas: 0 a {len(usuarios)}")
+    entrada = input("Inserte posición: ").strip() #Inserción en una posicion
+    if entrada.isdigit():
+        pos = int(entrada)
+        if 0 <= pos <= len(usuarios):
+            nombre = input("Nombre a insertar: ").strip()
+            if nombre:
+                usuarios.insert(pos, nombre)
+                print(f"'{nombre}' insertado en posición {pos}.")
+        else:
+            print("Posición fuera de rango.")  #Validación 
+    else:
+        print("Debes ingresar un número válido.")
+    return usuarios
+
+
+def eliminar_por_indice(usuarios):
+    if not usuarios:
+        print("La lista está vacía.")
+        return usuarios
+    print(f"Índices válidos: 0 a {len(usuarios)-1}")
+    entrada = input("Índice a eliminar: ").strip()
+    if entrada.isdigit():
+        idx = int(entrada)
+        if 0 <= idx < len(usuarios):
+            eliminado = usuarios.pop(idx)
+            print(f"Elemento eliminado: {eliminado}")
+        else:
+            print("Índice fuera de rango.")
+    else:
+        print("Debes ingresar un número válido.")
+    return usuarios
+
+
+def eliminar_por_valor(usuarios):
+    nombre = input("Nombre a eliminar: ").strip()
+    if nombre in usuarios:
+        usuarios.remove(nombre)
+        print(f"'{nombre}' eliminado.")
+    else:
+        print("Nombre no encontrado.")
+    return usuarios
+
+
+def buscar_indice(usuarios):
+    nombre = input("Nombre a buscar: ").strip()
+    if nombre in usuarios:
+        print(f"'{nombre}' está en la posición {usuarios.index(nombre)}.")
+    else:
+        print("Nombre no encontrado.")
+
+
+def contar_apariciones(usuarios):
+    nombre = input("Nombre a contar: ").strip()
+    print(f"'{nombre}' aparece {usuarios.count(nombre)} veces.")
+
+
+def ordenar_lista(usuarios):
+    usuarios.sort()
+    print("Lista ordenada A→Z.")
+    return usuarios
+
+
+def invertir_lista(usuarios):
+    usuarios.reverse()
+    print("Lista invertida.")
+    return usuarios
+
+
+def mostrar_lista(usuarios):
+    if usuarios:
+        print("\nLista actual:")
+        for i, u in enumerate(usuarios):
+            print(f"{i}: {u}")
+    else:
+        print("La lista está vacía.")
+
+
+def vaciar_lista(usuarios):
+    confirm = input("¿Seguro que quieres vaciar la lista? (s/n): ").strip().lower()
+    if confirm in ("s", "si"):
+        usuarios.clear()
+        print("Lista vaciada.")
+    return usuarios
+
+
+def main():
+    usuarios = ["JOHAN MOJICA", "GABRIEL BUENO", "Patricio estrella"]
+
+    while True:
+        opcion = mostrar_menu()
+
+        match opcion:
+            case "1":
+                usuarios = agregar_usuario(usuarios)
+            case "2":
+                usuarios = agregar_varios(usuarios)
+            case "3":
+                usuarios = insertar_usuario(usuarios)
+            case "4":
+                usuarios = eliminar_por_indice(usuarios)
+            case "5":
+                usuarios = eliminar_por_valor(usuarios)
+            case "6":
+                buscar_indice(usuarios)
+            case "7":
+                contar_apariciones(usuarios)
+            case "8":
+                usuarios = ordenar_lista(usuarios)
+            case "9":
+                usuarios = invertir_lista(usuarios)
+            case "10":
+                mostrar_lista(usuarios)
+            case "11":
+                usuarios = vaciar_lista(usuarios)
+            case "12":
+                print("Saliendo... ¡Hasta luego!")
+                break
+            case _:
+                print("Opción inválida.")
+
+        seguir = input("\n¿Deseas realizar otra operación? (s/n): ").strip().lower()
+        if seguir not in ("s", "si"):
+            print("\nFinalizando sesión. Lista final:")
+            mostrar_lista(usuarios)
+            break
+
+
+if __name__ == "__main__":
+    main()
