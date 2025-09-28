@@ -1,0 +1,127 @@
+# La pseudo-base de datos
+Base_datos_clientes = [
+    ("C001", "Ana Pérez", "ana.perez@email.com", [("F1001", "2025-09-20", 1500.00, 3), ("F1002", "2025-09-22", 2300.00, 5)]),
+    ("C002", "Luis Gómez", "luis.gomez@email.com", [("F1003", "2025-09-21", 1200.00, 2)]),
+    ("C003", "María López", "maria.lopez@email.com", [])
+]
+
+# Funcionas para cosas de clientes
+def buscar_cliente(codigo):
+    for cliente in Base_datos_clientes:
+        if cliente[0] == codigo:
+            return cliente
+    return None
+
+def mostrar_clientes():
+    for cliente in Base_datos_clientes:
+        print(f"\nCódigo: {cliente[0]}\nNombre: {cliente[1]}\nEmail: {cliente[2]}")
+        print("Facturas:")
+        for factura in cliente[3]:
+            print(f"  - Código: {factura[0]}, Fecha: {factura[1]}, Monto: {factura[2]}, Ítems: {factura[3]}")
+
+# el CRUD de clientes
+def agregar_cliente():
+    codigo = input("Código del cliente: ")
+    if buscar_cliente(codigo):
+        print("Ya existe un cliente con ese código.")
+        return
+    nombre = input("Nombre: ")
+    email = input("Email: ")
+    Base_datos_clientes.append((codigo, nombre, email, []))
+    print("Cliente agregado exitosamente.")
+
+def editar_cliente():
+    codigo = input("Código del cliente a editar: ")
+    cliente = buscar_cliente(codigo)
+    if cliente:
+        nombre = input(f"Nuevo nombre ({cliente[1]}): ") or cliente[1]
+        email = input(f"Nuevo email ({cliente[2]}): ") or cliente[2]
+        index = Base_datos_clientes.index(cliente)
+        Base_datos_clientes[index] = (codigo, nombre, email, cliente[3])
+        print("Cliente actualizado.")
+    else:
+        print("Cliente no encontrado.")
+
+def eliminar_cliente():
+    codigo = input("Código del cliente a eliminar: ")
+    cliente = buscar_cliente(codigo)
+    if cliente:
+        Base_datos_clientes.remove(cliente)
+        print("Cliente eliminado.")
+    else:
+        print("Cliente no encontrado.")
+
+# el CRUD de las facturas
+def agregar_factura():
+    codigo_cliente = input("Código del cliente: ")
+    cliente = buscar_cliente(codigo_cliente)
+    if cliente:
+        cod_factura = input("Código de factura: ")
+        fecha = input("Fecha (YYYY-MM-DD): ")
+        monto = float(input("Monto total: "))
+        items = int(input("Cantidad de ítems: "))
+        nueva_factura = (cod_factura, fecha, monto, items)
+        index = Base_datos_clientes.index(cliente)
+        facturas = cliente[3] + [nueva_factura]
+        Base_datos_clientes[index] = (cliente[0], cliente[1], cliente[2], facturas)
+        print("Factura agregada.")
+    else:
+        print("Cliente no encontrado.")
+
+def eliminar_factura():
+    codigo_cliente = input("Código del cliente: ")
+    cliente = buscar_cliente(codigo_cliente)
+    if cliente:
+        cod_factura = input("Código de factura a eliminar: ")
+        facturas = [f for f in cliente[3] if f[0] != cod_factura]
+        index = Base_datos_clientes.index(cliente)
+        Base_datos_clientes[index] = (cliente[0], cliente[1], cliente[2], facturas)
+        print("Factura eliminada.")
+    else:
+        print("Cliente no encontrado.")
+
+# Los menús
+def menu_facturas():
+    while True:
+        print("\n--- SUBMENÚ FACTURAS ---")
+        print("1. Agregar factura")
+        print("2. Eliminar factura")
+        print("3. Volver al menú principal")
+        opcion = input("Seleccione una opción: ")
+        if opcion == "1":
+            agregar_factura()
+        elif opcion == "2":
+            eliminar_factura()
+        elif opcion == "3":
+            break
+        else:
+            print("Opción inválida.")
+
+def menu_principal():
+    while True:
+        print("\n=== MENÚ PRINCIPAL ===")
+        print("1. Listar clientes y facturas")
+        print("2. Agregar cliente")
+        print("3. Editar cliente")
+        print("4. Eliminar cliente")
+        print("5. Gestión de facturas")
+        print("6. Salir")
+        opcion = input("Seleccione una opción: ")
+        if opcion == "1":
+            mostrar_clientes()
+        elif opcion == "2":
+            agregar_cliente()
+        elif opcion == "3":
+            editar_cliente()
+        elif opcion == "4":
+            eliminar_cliente()
+        elif opcion == "5":
+            menu_facturas()
+        elif opcion == "6":
+            print("¡Hasta luego!")
+            break
+        else:
+            print("Opción inválida.")
+
+# Ejecución
+menu_principal()
